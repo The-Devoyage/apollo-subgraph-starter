@@ -30,4 +30,4 @@ const port = process.env.BACKEND_PORT || 5002;
 
 apolloServer
   .listen({ port })
-  .then(({ url }) => console.log(`Users service ready at ${url}`));
+  .then(({ url }) => console.log(`Service ready at ${url}`));

@@ -26,7 +26,7 @@ mongoose
   .then(() => console.log("Mongo DB Connected..."))
   .catch((err) => console.log(err));
 
-const port = process.env.BACKEND_PORT || 5002;
+const port = process.env.PORT || 5999;
 
 apolloServer
   .listen({ port })

@@ -15,8 +15,8 @@ export const Mutation = gql`
   }
 
   extend type Mutation {
-    createModel(createModelInput: CreateModelInput): Model!
-    updateModel(updateModelInput: UpdateModelInput): Model!
-    deleteModel(deleteModelInput: DeleteModelInput): Model!
+    createModel(createModelInput: CreateModelInput!): Model!
+    updateModel(updateModelInput: UpdateModelInput!): Model!
+    deleteModel(deleteModelInput: DeleteModelInput!): Model!
   }
 `;

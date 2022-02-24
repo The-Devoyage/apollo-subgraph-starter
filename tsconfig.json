@@ -13,8 +13,7 @@
     }
   },
   "include": [
-    "types/custom/index.d.ts",
-    "types/generated/index.d.ts",
+    "types/**/*",
     "src"
   ],
   "exclude": ["node_modules"]

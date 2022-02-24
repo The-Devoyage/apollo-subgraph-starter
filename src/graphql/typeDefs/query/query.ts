@@ -14,6 +14,6 @@ export const Query = gql`
   }
 
   extend type Query {
-    getModels(getModelsInput: GetModelsInput): GetModelsResponse
+    getModels(getModelsInput: GetModelsInput!): GetModelsResponse!
   }
 `;

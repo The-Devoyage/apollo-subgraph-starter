@@ -3,11 +3,11 @@ import { QueryResolvers, Model as IModel } from "types/generated";
 import { Model } from "@src/models";
 
 export const Query: QueryResolvers = {
-  getModels: async (_model, args, _context) => {
+  getModels: async (_model, args) => {
     try {
       const { filters, options } = GenerateMongo({
         fieldFilters: args.getModelsInput,
-        config: args.getModelsInput.config,
+        config: args.getModelsInput?.config,
       });
 
       const models = await Model.findAndPaginate<IModel>(filters, options);

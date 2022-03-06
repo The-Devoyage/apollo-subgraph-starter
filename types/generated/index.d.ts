@@ -1,9 +1,11 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { Context } from 'types/context';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -51,6 +53,7 @@ export type FilterConfig = {
 
 export type GetModelsInput = {
   _id?: InputMaybe<StringFieldFilter>;
+  config?: InputMaybe<FilterConfig>;
   createdAt?: InputMaybe<StringFieldFilter>;
   name?: InputMaybe<StringFieldFilter>;
   updatedAt?: InputMaybe<StringFieldFilter>;
@@ -58,8 +61,8 @@ export type GetModelsInput = {
 
 export type GetModelsResponse = {
   __typename?: 'GetModelsResponse';
-  data?: Maybe<Array<Maybe<Model>>>;
-  stats?: Maybe<Stats>;
+  data: Array<Model>;
+  stats: Stats;
 };
 
 export type IntArrayFilter = {
@@ -99,17 +102,17 @@ export type Mutation = {
 
 
 export type MutationCreateModelArgs = {
-  createModelInput?: InputMaybe<CreateModelInput>;
+  createModelInput: CreateModelInput;
 };
 
 
 export type MutationDeleteModelArgs = {
-  deleteModelInput?: InputMaybe<DeleteModelInput>;
+  deleteModelInput: DeleteModelInput;
 };
 
 
 export type MutationUpdateModelArgs = {
-  updateModelInput?: InputMaybe<UpdateModelInput>;
+  updateModelInput: UpdateModelInput;
 };
 
 export enum OperatorFieldConfigEnum {
@@ -125,12 +128,12 @@ export type Pagination = {
 
 export type Query = {
   __typename?: 'Query';
-  getModels?: Maybe<GetModelsResponse>;
+  getModels: GetModelsResponse;
 };
 
 
 export type QueryGetModelsArgs = {
-  getModelsInput?: InputMaybe<GetModelsInput>;
+  getModelsInput: GetModelsInput;
 };
 
 export type Stats = {
@@ -292,19 +295,19 @@ export type ResolversParentTypes = ResolversObject<{
 
 export type ExtendsDirectiveArgs = { };
 
-export type ExtendsDirectiveResolver<Result, Parent, ContextType = any, Args = ExtendsDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export type ExtendsDirectiveResolver<Result, Parent, ContextType = Context, Args = ExtendsDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
 
-export type GetModelsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GetModelsResponse'] = ResolversParentTypes['GetModelsResponse']> = ResolversObject<{
-  data?: Resolver<Maybe<Array<Maybe<ResolversTypes['Model']>>>, ParentType, ContextType>;
-  stats?: Resolver<Maybe<ResolversTypes['Stats']>, ParentType, ContextType>;
+export type GetModelsResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['GetModelsResponse'] = ResolversParentTypes['GetModelsResponse']> = ResolversObject<{
+  data?: Resolver<Array<ResolversTypes['Model']>, ParentType, ContextType>;
+  stats?: Resolver<ResolversTypes['Stats'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ModelResolvers<ContextType = any, ParentType extends ResolversParentTypes['Model'] = ResolversParentTypes['Model']> = ResolversObject<{
+export type ModelResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Model'] = ResolversParentTypes['Model']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectID'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -312,22 +315,22 @@ export type ModelResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  createModel?: Resolver<ResolversTypes['Model'], ParentType, ContextType, Partial<MutationCreateModelArgs>>;
-  deleteModel?: Resolver<ResolversTypes['Model'], ParentType, ContextType, Partial<MutationDeleteModelArgs>>;
-  updateModel?: Resolver<ResolversTypes['Model'], ParentType, ContextType, Partial<MutationUpdateModelArgs>>;
+export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createModel?: Resolver<ResolversTypes['Model'], ParentType, ContextType, RequireFields<MutationCreateModelArgs, 'createModelInput'>>;
+  deleteModel?: Resolver<ResolversTypes['Model'], ParentType, ContextType, RequireFields<MutationDeleteModelArgs, 'deleteModelInput'>>;
+  updateModel?: Resolver<ResolversTypes['Model'], ParentType, ContextType, RequireFields<MutationUpdateModelArgs, 'updateModelInput'>>;
 }>;
 
 export interface ObjectIdScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['ObjectID'], any> {
   name: 'ObjectID';
 }
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   _service?: Resolver<ResolversTypes['_Service'], ParentType, ContextType>;
-  getModels?: Resolver<Maybe<ResolversTypes['GetModelsResponse']>, ParentType, ContextType, Partial<QueryGetModelsArgs>>;
+  getModels?: Resolver<ResolversTypes['GetModelsResponse'], ParentType, ContextType, RequireFields<QueryGetModelsArgs, 'getModelsInput'>>;
 }>;
 
-export type StatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Stats'] = ResolversParentTypes['Stats']> = ResolversObject<{
+export type StatsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Stats'] = ResolversParentTypes['Stats']> = ResolversObject<{
   cursor?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   page?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   remaining?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -335,12 +338,12 @@ export type StatsResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type _ServiceResolvers<ContextType = any, ParentType extends ResolversParentTypes['_Service'] = ResolversParentTypes['_Service']> = ResolversObject<{
+export type _ServiceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['_Service'] = ResolversParentTypes['_Service']> = ResolversObject<{
   sdl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type Resolvers<ContextType = any> = ResolversObject<{
+export type Resolvers<ContextType = Context> = ResolversObject<{
   DateTime?: GraphQLScalarType;
   GetModelsResponse?: GetModelsResponseResolvers<ContextType>;
   Model?: ModelResolvers<ContextType>;
@@ -351,6 +354,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   _Service?: _ServiceResolvers<ContextType>;
 }>;
 
-export type DirectiveResolvers<ContextType = any> = ResolversObject<{
+export type DirectiveResolvers<ContextType = Context> = ResolversObject<{
   extends?: ExtendsDirectiveResolver<any, any, ContextType>;
 }>;

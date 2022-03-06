@@ -1,9 +1,9 @@
-import { gql } from "apollo-server-express";
+import { gql } from "apollo-server";
 
 export const Query = gql`
   type GetModelsResponse {
-    data: [Model]
-    stats: Stats
+    data: [Model!]!
+    stats: Stats!
   }
 
   input GetModelsInput {
@@ -11,6 +11,7 @@ export const Query = gql`
     createdAt: StringFieldFilter
     updatedAt: StringFieldFilter
     name: StringFieldFilter
+    config: FilterConfig
   }
 
   extend type Query {

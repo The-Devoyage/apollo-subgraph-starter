@@ -10,7 +10,7 @@ export const Mutation: MutationResolvers = {
 
       const model = new Model({
         ...args.createModelInput,
-        created_by: context.auth.payload.user._id,
+        created_by: context.auth.payload.user?._id,
       });
       await model.save();
 
@@ -34,9 +34,9 @@ export const Mutation: MutationResolvers = {
         return Error("Does not exist.");
       }
 
-      if (context.auth.payload.user._id !== model.created_by) {
+      if (context.auth.payload.user?._id !== model.created_by) {
         LimitRole({
-          userRole: context.auth.payload.user.role,
+          userRole: context.auth.payload.user?.role,
           roleLimit: 1,
           errorMessage:
             "Only admin may edit models that are created by other users.",
@@ -69,9 +69,9 @@ export const Mutation: MutationResolvers = {
         return Error("Does not exist.");
       }
 
-      if (context.auth.payload.user._id !== model.created_by) {
+      if (context.auth.payload.user?._id !== model.created_by) {
         LimitRole({
-          userRole: context.auth.payload.user.role,
+          userRole: context.auth.payload.user?.role,
           roleLimit: 1,
           errorMessage:
             "Only admin may delete models that are created by other users.",

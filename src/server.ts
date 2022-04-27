@@ -19,14 +19,11 @@ const DB = process.env.MONGO_URI;
 
 if (DB) {
   mongoose
-    .connect(DB, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-    })
+    .connect(DB)
     .then(() => console.log("Mongo DB Connected..."))
     .catch((err) => console.log(err));
+} else {
+  console.log("DB Not Connected - Mongo URI Missing");
 }
 
 const port = process.env.PORT || 5999;

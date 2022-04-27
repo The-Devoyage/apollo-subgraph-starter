@@ -15,6 +15,7 @@ export type Scalars = {
   Float: number;
   DateTime: any;
   ObjectID: any;
+  _Any: any;
 };
 
 export enum ArrayFilterByEnum {
@@ -22,17 +23,15 @@ export enum ArrayFilterByEnum {
   Nin = 'NIN'
 }
 
-export type BooleanArrayFilter = {
-  arrayOptions: ArrayFilterByEnum;
-  bool: Scalars['Boolean'];
-  filterBy: BooleanFilterByEnum;
-};
-
+/** Filter for documents which have a property that is a Boolean. */
 export type BooleanFieldFilter = {
   bool: Scalars['Boolean'];
   filterBy: BooleanFilterByEnum;
+  groups?: InputMaybe<Array<Scalars['String']>>;
+  operator?: InputMaybe<OperatorFieldConfigEnum>;
 };
 
+/** Equal or Not Equal */
 export enum BooleanFilterByEnum {
   Eq = 'EQ',
   Ne = 'NE'
@@ -42,12 +41,29 @@ export type CreateModelInput = {
   name: Scalars['String'];
 };
 
+/** Filter for documents which have a property that is a Date. */
+export type DateFieldFilter = {
+  date: Scalars['DateTime'];
+  filterBy: DateFilterByEnum;
+  groups?: InputMaybe<Array<Scalars['String']>>;
+  operator?: InputMaybe<OperatorFieldConfigEnum>;
+};
+
+export enum DateFilterByEnum {
+  Eq = 'EQ',
+  Gt = 'GT',
+  Gte = 'GTE',
+  Lt = 'LT',
+  Lte = 'LTE',
+  Ne = 'NE'
+}
+
 export type DeleteModelInput = {
   _id: Scalars['ObjectID'];
 };
 
+/** Global configuration details. */
 export type FilterConfig = {
-  operator?: InputMaybe<OperatorFieldConfigEnum>;
   pagination?: InputMaybe<Pagination>;
 };
 
@@ -65,15 +81,12 @@ export type GetModelsResponse = {
   stats: Stats;
 };
 
-export type IntArrayFilter = {
-  arrayOptions: ArrayFilterByEnum;
-  filterBy: IntFilterByEnum;
-  int: Scalars['Int'];
-};
-
+/** Filter for documents which have a property that is an Integer. */
 export type IntFieldFilter = {
   filterBy: IntFilterByEnum;
+  groups?: InputMaybe<Array<Scalars['String']>>;
   int: Scalars['Int'];
+  operator?: InputMaybe<OperatorFieldConfigEnum>;
 };
 
 export enum IntFilterByEnum {
@@ -89,6 +102,7 @@ export type Model = {
   __typename?: 'Model';
   _id: Scalars['ObjectID'];
   createdAt: Scalars['DateTime'];
+  created_by: User;
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
@@ -144,14 +158,20 @@ export type Stats = {
   total?: Maybe<Scalars['Int']>;
 };
 
-export type StringArrayFilter = {
+/** Filter for documents which have a property that is an array of strings.. */
+export type StringArrayFieldFilter = {
   arrayOptions: ArrayFilterByEnum;
   filterBy: StringFilterByEnum;
+  groups?: InputMaybe<Array<Scalars['String']>>;
+  operator?: InputMaybe<OperatorFieldConfigEnum>;
   string: Array<Scalars['String']>;
 };
 
+/** Filter for documents which have a property that is a string. Filter by REGEX, ObjectID, or Match. */
 export type StringFieldFilter = {
   filterBy: StringFilterByEnum;
+  groups?: InputMaybe<Array<Scalars['String']>>;
+  operator?: InputMaybe<OperatorFieldConfigEnum>;
   string: Scalars['String'];
 };
 
@@ -164,6 +184,11 @@ export enum StringFilterByEnum {
 export type UpdateModelInput = {
   _id: Scalars['ObjectID'];
   name?: InputMaybe<Scalars['String']>;
+};
+
+export type User = {
+  __typename?: 'User';
+  _id: Scalars['ObjectID'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -238,17 +263,17 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   ArrayFilterByEnum: ArrayFilterByEnum;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  BooleanArrayFilter: BooleanArrayFilter;
   BooleanFieldFilter: BooleanFieldFilter;
   BooleanFilterByEnum: BooleanFilterByEnum;
   CreateModelInput: CreateModelInput;
+  DateFieldFilter: DateFieldFilter;
+  DateFilterByEnum: DateFilterByEnum;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>;
   DeleteModelInput: DeleteModelInput;
   FilterConfig: FilterConfig;
   GetModelsInput: GetModelsInput;
   GetModelsResponse: ResolverTypeWrapper<GetModelsResponse>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  IntArrayFilter: IntArrayFilter;
   IntFieldFilter: IntFieldFilter;
   IntFilterByEnum: IntFilterByEnum;
   Model: ResolverTypeWrapper<Model>;
@@ -259,26 +284,28 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   Stats: ResolverTypeWrapper<Stats>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  StringArrayFilter: StringArrayFilter;
+  StringArrayFieldFilter: StringArrayFieldFilter;
   StringFieldFilter: StringFieldFilter;
   StringFilterByEnum: StringFilterByEnum;
   UpdateModelInput: UpdateModelInput;
+  User: ResolverTypeWrapper<User>;
+  _Any: ResolverTypeWrapper<Scalars['_Any']>;
+  _Entity: ResolversTypes['User'];
   _Service: ResolverTypeWrapper<_Service>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
-  BooleanArrayFilter: BooleanArrayFilter;
   BooleanFieldFilter: BooleanFieldFilter;
   CreateModelInput: CreateModelInput;
+  DateFieldFilter: DateFieldFilter;
   DateTime: Scalars['DateTime'];
   DeleteModelInput: DeleteModelInput;
   FilterConfig: FilterConfig;
   GetModelsInput: GetModelsInput;
   GetModelsResponse: GetModelsResponse;
   Int: Scalars['Int'];
-  IntArrayFilter: IntArrayFilter;
   IntFieldFilter: IntFieldFilter;
   Model: Model;
   Mutation: {};
@@ -287,9 +314,12 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   Stats: Stats;
   String: Scalars['String'];
-  StringArrayFilter: StringArrayFilter;
+  StringArrayFieldFilter: StringArrayFieldFilter;
   StringFieldFilter: StringFieldFilter;
   UpdateModelInput: UpdateModelInput;
+  User: User;
+  _Any: Scalars['_Any'];
+  _Entity: ResolversParentTypes['User'];
   _Service: _Service;
 }>;
 
@@ -310,6 +340,7 @@ export type GetModelsResponseResolvers<ContextType = Context, ParentType extends
 export type ModelResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Model'] = ResolversParentTypes['Model']> = ResolversObject<{
   _id?: Resolver<ResolversTypes['ObjectID'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  created_by?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -326,6 +357,7 @@ export interface ObjectIdScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 }
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  _entities?: Resolver<Array<Maybe<ResolversTypes['_Entity']>>, ParentType, ContextType, RequireFields<Query_EntitiesArgs, 'representations'>>;
   _service?: Resolver<ResolversTypes['_Service'], ParentType, ContextType>;
   getModels?: Resolver<ResolversTypes['GetModelsResponse'], ParentType, ContextType, RequireFields<QueryGetModelsArgs, 'getModelsInput'>>;
 }>;
@@ -336,6 +368,19 @@ export type StatsResolvers<ContextType = Context, ParentType extends ResolversPa
   remaining?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  _id?: Resolver<ResolversTypes['ObjectID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export interface _AnyScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['_Any'], any> {
+  name: '_Any';
+}
+
+export type _EntityResolvers<ContextType = Context, ParentType extends ResolversParentTypes['_Entity'] = ResolversParentTypes['_Entity']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'User', ParentType, ContextType>;
 }>;
 
 export type _ServiceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['_Service'] = ResolversParentTypes['_Service']> = ResolversObject<{
@@ -351,6 +396,9 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   ObjectID?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   Stats?: StatsResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
+  _Any?: GraphQLScalarType;
+  _Entity?: _EntityResolvers<ContextType>;
   _Service?: _ServiceResolvers<ContextType>;
 }>;
 

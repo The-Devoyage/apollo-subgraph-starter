@@ -6,5 +6,6 @@ export const Model = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     name: String!
+    created_by: User!
   }
 `;

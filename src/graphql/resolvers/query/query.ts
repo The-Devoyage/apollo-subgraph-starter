@@ -5,12 +5,12 @@ import { Model } from "@src/models";
 export const Query: QueryResolvers = {
   getModels: async (_model, args) => {
     try {
-      const { filters, options } = GenerateMongo({
+      const { filter, options } = GenerateMongo({
         fieldFilters: args.getModelsInput,
         config: args.getModelsInput?.config,
       });
 
-      const models = await Model.findAndPaginate<IModel>(filters, options);
+      const models = await Model.findAndPaginate<IModel>(filter, options);
 
       return models;
     } catch (error) {
